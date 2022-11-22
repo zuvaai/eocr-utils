@@ -1,0 +1,21 @@
+TOPTARGETS = build install uninstall strip build-static
+TOP_PAR_TARGETS = $(foreach t, $(TOPTARGETS), $t-p)
+GOPATH ?= $(shell go env GOPATH)
+GOBIN ?= $(GOPATH)/bin
+GOMOD_PATH = $(GOPATH)/pkg/mod
+
+# Need a separate GOOS since it breaks go generate if it doesn't match host
+export CCGOOS ?= $(shell uname | tr '[:upper:]' '[:lower:]')
+
+PROTO_FILES = $(shell find . -name *.proto)
+GENERATED_FILES = $(patsubst %.proto,%.pb.go,$(PROTO_FILES))
+
+export GO_VERSION ?= 1.19.1
+export GOLANGCI_VERSION = 1.50.1
+export LINTER_BIN ?= $(GOPATH)/bin/golangci-lint
+
+BUILDER_IMAGE = builder-engine
+BUILDER_VERSION ?= latest
+
+SRC_PATH = ./internal/... ./pkg/...
+TEST_PATH = ./tests/...

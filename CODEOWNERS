@@ -1,0 +1,5 @@
+# PRs require review from Multiverse
+* @zuvaai/Multiverse
+
+# Changes to the file format requires coordination between Multiverse, Cetas, and Omega
+pkg/document/recognition_results.proto @zuvaai/Multiverse @zuvaai/Cetas @zuvaai/Omega
