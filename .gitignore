@@ -1,0 +1,21 @@
+### macOS
+.DS_Store
+
+### Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+
+### Go
+*.test
+vendor/
+
+### IDE
+.vscode/
+.history/
+.history
+.ionide
+.idea
