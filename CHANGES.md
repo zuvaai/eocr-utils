@@ -21,4 +21,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Some versions of `recognition_results.proto` used the name `CharacterRange` for spans. In this repo, we use the name `Span`.
+- Some versions of `recognition_results.proto` used the name `CharacterRange` for spans. In this repo, we use the name `Span`. Since protobuf does structural matching, this does not impact interoperability.
