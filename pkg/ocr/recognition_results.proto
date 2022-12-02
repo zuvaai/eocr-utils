@@ -4,9 +4,6 @@
 syntax = "proto3";
 
 package ocr;
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-option go_package = "github.com/zuvaai/eocr-utils/pkg/document";
-option (gogoproto.goproto_getters_all) = false;
 
 message Document {
   // Required
@@ -52,8 +49,9 @@ message Character {
 }
 
 message Page {
+  // Required
   // The range of characters the page covers.
-  Span character_span = 1  [(gogoproto.nullable) = false];
+  Span character_span = 1;
   // The width of the page in pixels.
   uint32 width = 2;
   // The height of the page in pixels.
@@ -89,8 +87,9 @@ message TableCell {
 }
 
 message Font {
+  // Required
   // The character range that uses this font.
-  Span character_span = 1  [(gogoproto.nullable) = false];
+  Span character_span = 1;
   // The name of the font.
   string name = 2;
   // True if the font is a serif.
@@ -100,8 +99,9 @@ message Font {
 }
 
 message FontSize {
+  // Required
   // The character range this attribute applies to.
-  Span character_span = 1  [(gogoproto.nullable) = false];
+  Span character_span = 1;
   // The size of the font in points. A typical point size is 11 or 12.
   uint32 size = 2;
 }
@@ -117,8 +117,9 @@ message FontStyle {
     DROPCAP = 6;
     SMALLCAPS = 7;
   }
+  // Required
   // The character span this attribute applies to. TODO: consistent naming!
-  Span character_span = 1 [(gogoproto.nullable) = false];
+  Span character_span = 1;
   // The style of the text in this span.
   Style style = 8;
 }

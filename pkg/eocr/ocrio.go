@@ -9,7 +9,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/zuvaai/eocr-utils/internal/filetype"
 	"github.com/zuvaai/eocr-utils/internal/gzip"
-	"github.com/zuvaai/eocr-utils/pkg/document"
+	"github.com/zuvaai/eocr-utils/pkg/ocr"
 )
 
 const (
@@ -44,7 +44,7 @@ var (
 
 // ReadFile reads ocr results from a protobuf file and returns a pointer to an
 // unprepared Document.
-func ReadFile(filename string) (*document.Document, error) {
+func ReadFile(filename string) (*ocr.Document, error) {
 	in, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func ReadFile(filename string) (*document.Document, error) {
 
 // Unmarshal parses a protobuf byte array and returns a pointer to an
 // unpreprepared Document.
-func Unmarshal(data []byte) (*document.Document, error) {
+func Unmarshal(data []byte) (*ocr.Document, error) {
 	if err := Verify(data); err != nil {
 		return nil, err
 	}
@@ -62,14 +62,14 @@ func Unmarshal(data []byte) (*document.Document, error) {
 	if err != nil {
 		return nil, err
 	}
-	doc := &document.Document{}
+	doc := &ocr.Document{}
 	if err := proto.Unmarshal(msg, doc); err != nil {
 		return nil, err
 	}
 
 	if len(doc.Pages) == 0 || len(doc.Characters) == 0 {
 		// return a completely empty document
-		return &document.Document{}, nil
+		return &ocr.Document{}, nil
 	}
 
 	return doc, nil
@@ -102,7 +102,7 @@ func Verify(data []byte) error {
 }
 
 // Marshal takes a Document and writes it to eocr format.
-func Marshal(doc *document.Document) ([]byte, error) {
+func Marshal(doc *ocr.Document) ([]byte, error) {
 	msg, err := proto.Marshal(doc)
 	if err != nil {
 		return nil, err

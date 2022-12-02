@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/zuvaai/eocr-utils/pkg/document"
+	"github.com/zuvaai/eocr-utils/pkg/ocr"
 )
 
 func TestReadFile(t *testing.T) {
@@ -28,19 +28,19 @@ func TestVerify(t *testing.T) {
 
 func TestUnmarshal(t *testing.T) {
 	tests := map[string]struct {
-		transform    func(*document.Document)
+		transform    func(*ocr.Document)
 		wantEmptyDoc bool
 	}{
 		"no pages": {
-			transform:    func(doc *document.Document) { doc.Pages = nil },
+			transform:    func(doc *ocr.Document) { doc.Pages = nil },
 			wantEmptyDoc: true,
 		},
 		"no characters": {
-			transform:    func(doc *document.Document) { doc.Characters = nil },
+			transform:    func(doc *ocr.Document) { doc.Characters = nil },
 			wantEmptyDoc: true,
 		},
 		"ok": {
-			transform:    func(doc *document.Document) {},
+			transform:    func(doc *ocr.Document) {},
 			wantEmptyDoc: false,
 		},
 	}
@@ -62,11 +62,11 @@ func TestUnmarshal(t *testing.T) {
 			got, err := Unmarshal(serialized)
 			if tt.wantEmptyDoc {
 				require.NoError(t, err)
-				require.Equal(t, *got, document.Document{})
+				require.Equal(t, *got, ocr.Document{})
 			} else {
 				require.NoError(t, nil)
 				require.NotNil(t, got)
-				require.NotEqual(t, *got, document.Document{})
+				require.NotEqual(t, *got, ocr.Document{})
 				require.NotEmpty(t, got.Pages)
 				require.NotEmpty(t, got.Characters)
 				require.NotEmpty(t, got.Md5)
@@ -88,7 +88,7 @@ func TestReadSupportedLegacyFile(t *testing.T) {
 	got, err := Unmarshal(serialized)
 	require.NoError(t, err)
 	require.NotNil(t, got)
-	require.NotEqual(t, *got, document.Document{})
+	require.NotEqual(t, *got, ocr.Document{})
 	require.NotEmpty(t, got.Pages)
 	require.NotEmpty(t, got.Characters)
 	require.NotEmpty(t, got.Md5)
