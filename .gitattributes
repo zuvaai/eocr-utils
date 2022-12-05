@@ -1,0 +1,2 @@
+*.eocr filter=lfs diff=lfs merge=lfs -text
+*.edoc filter=lfs diff=lfs merge=lfs -text
