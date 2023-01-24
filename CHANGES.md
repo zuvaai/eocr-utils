@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `pkg/eocr` contains the all the errors (variables begining with `Err`)
 - CODEOWNERS configuration
 - README
+- Release command `cmd/release`
 
 ### Removed
 

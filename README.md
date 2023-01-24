@@ -18,3 +18,13 @@ make
 make lfs-checkout
 make test
 ```
+
+# Developing
+
+- Changes since the last version must be documented in `CHANGES.md`, see https://keepachangelog.com/en/1.0.0/
+
+# Releasing a new version of eocr-utils
+
+- Update the release tag in `CHANGES.md`
+- Build the release executable if necessary (`make -C cmd/release`)
+- Run the release command with a new tag: `cmd/release/release create v0.0.1`
