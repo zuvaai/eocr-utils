@@ -93,3 +93,55 @@ func TestReadSupportedLegacyFile(t *testing.T) {
 	require.NotEmpty(t, got.Characters)
 	require.NotEmpty(t, got.Md5)
 }
+
+func TestNewDocumentFromText(t *testing.T) {
+	// simple test to check if NewDocumentFromText works. Internal tests of FromUTF8 are more detailed.
+	maxLineSymbols := 70
+	maxPageLines := 10
+	numChars := 11
+	numPages := 1
+	doc, err := NewDocumentFromText("foo bar baz", maxLineSymbols, maxPageLines)
+	require.NoError(t, err)
+	assert.Equal(t, numPages, len(doc.Pages), "number of pages")
+	if assert.Equal(t, numChars, len(doc.Characters), "number of characters") {
+		assert.Equal(t, ocr.Character{
+			Unicode: uint32('f'),
+			BoundingBox: &ocr.BoundingBox{
+				X1: 0,
+				Y1: 0,
+				X2: 10,
+				Y2: 10,
+			},
+		}, *doc.Characters[0], 0)
+	}
+	doc, err = NewDocumentFromText("foo bar baz", maxLineSymbols)
+	require.NoError(t, err)
+	assert.Equal(t, numPages, len(doc.Pages), "number of pages")
+	if assert.Equal(t, numChars, len(doc.Characters), "number of characters") {
+		assert.Equal(t, ocr.Character{
+			Unicode: uint32('f'),
+			BoundingBox: &ocr.BoundingBox{
+				X1: 0,
+				Y1: 0,
+				X2: 10,
+				Y2: 10,
+			},
+		}, *doc.Characters[0], 0)
+	}
+	doc, err = NewDocumentFromText("foo bar baz")
+	require.NoError(t, err)
+	assert.Equal(t, numPages, len(doc.Pages), "number of pages")
+	if assert.Equal(t, numChars, len(doc.Characters), "number of characters") {
+		assert.Equal(t, ocr.Character{
+			Unicode: uint32('f'),
+			BoundingBox: &ocr.BoundingBox{
+				X1: 0,
+				Y1: 0,
+				X2: 10,
+				Y2: 10,
+			},
+		}, *doc.Characters[0], 0)
+	}
+	_, err = NewDocumentFromText("foo bar baz", 1, 2, 3) // invalid number of args
+	require.Error(t, err)
+}

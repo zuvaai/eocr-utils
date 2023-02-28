@@ -9,6 +9,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/zuvaai/eocr-utils/internal/filetype"
 	"github.com/zuvaai/eocr-utils/internal/gzip"
+	"github.com/zuvaai/eocr-utils/internal/text"
 	"github.com/zuvaai/eocr-utils/pkg/ocr"
 )
 
@@ -50,6 +51,32 @@ func ReadFile(filename string) (*ocr.Document, error) {
 		return nil, err
 	}
 	return Unmarshal(in)
+}
+
+const (
+	defaultLineLength = 80
+	defaultPageLength = 200
+)
+
+// NewDocumentFromText(content, lineLength, pageLength) creates a new document with the supplied UTF-8 content.
+// lineLength (optional) is the length of each line in the new document (in characters)
+// pageLength (optional) is the number of lines per page in the new document
+func NewDocumentFromText(content string, args ...int) (*ocr.Document, error) {
+	var lineLength, pageLength int
+	switch len(args) {
+	case 0:
+		lineLength = defaultLineLength
+		pageLength = defaultPageLength
+	case 1:
+		lineLength = args[0]
+		pageLength = defaultPageLength
+	case 2:
+		lineLength = args[0]
+		pageLength = args[1]
+	default:
+		return nil, fmt.Errorf("invalid number of arguments passed when creating new document from text")
+	}
+	return text.FromUTF8(content, lineLength, pageLength)
 }
 
 // Unmarshal parses a protobuf byte array and returns a pointer to an
