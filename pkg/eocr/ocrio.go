@@ -58,9 +58,12 @@ const (
 	defaultPageLength = 200
 )
 
-// NewDocumentFromText(content, lineLength, pageLength) creates a new document with the supplied UTF-8 content.
-// lineLength (optional) is the length of each line in the new document (in characters)
-// pageLength (optional) is the number of lines per page in the new document
+// NewDocumentFromText(content, lineLength, pageLength) creates a new document
+// with the supplied UTF-8 content and optional arguments to specify the line
+// and page lengths.
+// The second argument lineLength (optional) is the length of each line in the
+// new document (in characters) and the third argument pageLength (optional) is
+// the number of lines per page in the new document.
 func NewDocumentFromText(content string, args ...int) (*ocr.Document, error) {
 	var lineLength, pageLength int
 	switch len(args) {
