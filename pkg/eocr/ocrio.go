@@ -150,8 +150,8 @@ func Marshal(doc *ocr.Document) ([]byte, error) {
 	return data, nil
 }
 
-// CompareEOCRs checks if two eocrs are identical by checking properties
-func CompareEOCRs(inputEOCR, refEOCR *ocr.Document) error {
+// CompareEOCRMetadata checks if metadata from two EOCRs are identical
+func CompareEOCRMetadata(inputEOCR, refEOCR *ocr.Document) error {
 	errMsgs := make([]string, 0)
 	if inputEOCR.Md5 == nil || refEOCR.Md5 == nil {
 		errMsgs = append(errMsgs, fmt.Sprintf("invalid/corrupted eocr files: MD5 for input: %v, MD5 for ref: %v", inputEOCR.Md5, refEOCR.Md5))

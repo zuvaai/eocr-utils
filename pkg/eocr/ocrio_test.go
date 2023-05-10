@@ -146,7 +146,7 @@ func TestNewDocumentFromText(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestCompareEOCRs(t *testing.T) {
+func TestCompareEOCRMetadata(t *testing.T) {
 	tests := map[string]struct {
 		inputEOCR, refEOCR string
 		wantErr            bool
@@ -173,8 +173,8 @@ func TestCompareEOCRs(t *testing.T) {
 			require.NoError(t, err)
 			require.NotNil(t, rEOCR.Md5)
 
-			// Compare EOCRs
-			err = CompareEOCRs(iEOCR, rEOCR)
+			// Compare metadata of two EOCRs
+			err = CompareEOCRMetadata(iEOCR, rEOCR)
 			require.True(t, (err != nil) == tt.wantErr)
 		})
 	}
