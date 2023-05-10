@@ -5,11 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [v0.0.2]
 
 ### Added
 
 - `pkg/eocr` now has a `NewDocumentFromText` function to create documents from a UTF8 text.
+- `pkg/eocr` now has a `CompareEOCRMetadata` function to compare eocr metadata: page, character, table, and tablecell counts and the md5 hash field.
 
 ## [v0.0.1]
 
