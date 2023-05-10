@@ -145,3 +145,38 @@ func TestNewDocumentFromText(t *testing.T) {
 	_, err = NewDocumentFromText("foo bar baz", 1, 2, 3) // invalid number of args
 	require.Error(t, err)
 }
+
+func TestCompareEOCRs(t *testing.T) {
+	tests := map[string]struct {
+		inputEOCR, refEOCR string
+		wantErr            bool
+	}{
+		"different EOCRs": {
+			inputEOCR: "../../testdata/jbs.eocr",
+			refEOCR:   "../../testdata/npc.eocr",
+			wantErr:   true,
+		},
+		"same EOCRs": {
+			inputEOCR: "../../testdata/jbs.eocr",
+			refEOCR:   "../../testdata/jbs.eocr",
+			wantErr:   false,
+		},
+	}
+
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			// load EOCRs for input and reference
+			iEOCR, err := ReadFile(tt.inputEOCR)
+			require.NoError(t, err)
+			require.NotNil(t, iEOCR.Md5)
+			rEOCR, err := ReadFile(tt.refEOCR)
+			require.NoError(t, err)
+			require.NotNil(t, rEOCR.Md5)
+
+			// Compare EOCRs
+			err = CompareEOCRs(iEOCR, rEOCR)
+			require.True(t, (err != nil) == tt.wantErr)
+		})
+	}
+
+}

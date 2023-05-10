@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/zuvaai/eocr-utils/internal/filetype"
@@ -147,4 +148,47 @@ func Marshal(doc *ocr.Document) ([]byte, error) {
 	copy(data[headerSize:], checksum[:])
 	copy(data[headerSize+sha1.Size:], gzMsg)
 	return data, nil
+}
+
+// CompareEOCRs checks if two eocrs are identical by checking properties
+func CompareEOCRs(inputEOCR, refEOCR *ocr.Document) error {
+	errMsgs := make([]string, 0)
+	if inputEOCR.Md5 == nil || refEOCR.Md5 == nil {
+		errMsgs = append(errMsgs, fmt.Sprintf("invalid/corrupted eocr files: MD5 for input: %v, MD5 for ref: %v", inputEOCR.Md5, refEOCR.Md5))
+	}
+	if len(inputEOCR.Pages) != len(refEOCR.Pages) {
+		errMsgs = append(errMsgs, "Difference in number of pages:")
+		errMsgs = append(errMsgs, fmt.Sprintf("(inputEOCR: %v", len(inputEOCR.Pages)))
+		errMsgs = append(errMsgs, fmt.Sprintf("refEOCR: %v)", len(refEOCR.Pages)))
+	}
+	if len(inputEOCR.Characters) != len(refEOCR.Characters) {
+		errMsgs = append(errMsgs, "Difference in number of characters:")
+		errMsgs = append(errMsgs, fmt.Sprintf("(inputEOCR: %v", len(inputEOCR.Characters)))
+		errMsgs = append(errMsgs, fmt.Sprintf("refEOCR: %v)", len(refEOCR.Characters)))
+	}
+	if inputEOCR.Version != refEOCR.Version {
+		errMsgs = append(errMsgs, "Difference in version:")
+		errMsgs = append(errMsgs, fmt.Sprintf("(inputEOCR: %v", inputEOCR.Version))
+		errMsgs = append(errMsgs, fmt.Sprintf("refEOCR: %v)", refEOCR.Version))
+	}
+	if len(inputEOCR.Tables) != len(refEOCR.Tables) {
+		errMsgs = append(errMsgs, "Difference in number of Tables:")
+		errMsgs = append(errMsgs, fmt.Sprintf("(inputEOCR: %v", len(inputEOCR.Tables)))
+		errMsgs = append(errMsgs, fmt.Sprintf("refEOCR: %v)", len(refEOCR.Tables)))
+	}
+	if len(inputEOCR.TableCells) != len(refEOCR.TableCells) {
+		errMsgs = append(errMsgs, "Difference in number of TableCells:")
+		errMsgs = append(errMsgs, fmt.Sprintf("(inputEOCR: %v", len(inputEOCR.TableCells)))
+		errMsgs = append(errMsgs, fmt.Sprintf("refEOCR: %v)", len(refEOCR.TableCells)))
+	}
+	if !bytes.Equal(inputEOCR.Md5, refEOCR.Md5) {
+		errMsgs = append(errMsgs, "Difference in MD5:")
+		errMsgs = append(errMsgs, fmt.Sprintf("(inputEOCR: %v", inputEOCR.Md5))
+		errMsgs = append(errMsgs, fmt.Sprintf("refEOCR: %v)", refEOCR.Md5))
+	}
+	if len(errMsgs) > 0 {
+		return fmt.Errorf(strings.Join(errMsgs, " "))
+	} else {
+		return nil
+	}
 }
