@@ -1,7 +1,9 @@
 # Utilities for eOCR files
 
 This repo is the canonical home for utilities related to creating and
-validating eOCR files.
+validating eOCR files primarily for _Zuva Internal_ usage.
+
+**Note:** For external users, if you do not have Golang experience, please refer to [docai-examples](https://github.com/zuvaai/docai-examples) or our [DocAI Tutorials](https://zuva.ai/documentation/tutorials/). 
 
 The repo is also the canonical home for the `recognition_results.proto` file
 which is the main building block of the eOCR file format.
