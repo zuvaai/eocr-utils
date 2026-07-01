@@ -18,7 +18,7 @@ jobs:
           go-version: "1.19.3"
 
       - name: Checkout
-        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
+        uses: zuvaai/github-actions/checkout@main
 
       - name: Create LFS file list
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
